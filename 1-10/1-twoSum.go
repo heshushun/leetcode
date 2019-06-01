@@ -12,8 +12,6 @@ import "fmt"
 所以返回 [0, 1]
 */
 
-import "fmt"
-
 func main() {
 	nums := []int {1,3,4,6,7,10}
 	target := 17

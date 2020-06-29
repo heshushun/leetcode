@@ -1,14 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"math"
-	"strconv"
-)
+import "fmt"
 
 /*
-12. 整数转罗马数字
-罗马数字包含以下七种字符： I， V， X， L，C，D 和 M。
+13. 罗马数字转整数
+罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。
 
 字符          数值
 I             1
@@ -25,30 +21,37 @@ M             1000
 I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。
 X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 
 C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。
-给定一个整数，将其转为罗马数字。输入确保在 1 到 3999 的范围内。
-
+给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内。
 */
+
 func main() {
-	s := 19
-	r := intToRoman(s)
+	s := "IV"
+	r := romanToInt(s)
 	fmt.Println(r)
 }
 
-func intToRoman(num int) string {
-	roman := []string{"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"}
-	intSlice := []int{1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000}
-	s := ""
-	x := len(intSlice) - 1
-	for ; num != 0; {
-		i := len(strconv.Itoa(num)) - 1
-		n := (num / int(math.Pow10(i))) * int(math.Pow10(i))
-		for ; x >= 0; x-- {
-			if n >= intSlice[x]{
-				s += roman[x]
-				num -= intSlice[x]
-				break
-			}
-		}
+func romanToInt(s string) int {
+	m := map[byte] int {
+		'I': 1,
+		'V': 5,
+		'X': 10,
+		'L': 50,
+		'C': 100,
+		'D': 500,
+		'M': 1000,
 	}
-	return s
+
+	pre := 0
+	ret := 0
+	for i := len(s) -1; i >= 0; i-- {
+		cur := m[s[i]]
+		if cur >= pre {
+			ret += cur
+		}else {
+			ret -= cur
+		}
+		pre = cur
+	}
+
+	return ret
 }

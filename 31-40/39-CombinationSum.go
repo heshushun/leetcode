@@ -1,9 +1,5 @@
 package main
 
-import (
-	"sort"
-)
-
 // 39-组合总和
 
 //给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。 
@@ -56,39 +52,27 @@ func main() {
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
-// result 定义为全局变量，减少回溯函数的一个参数传入量，看起来简洁点
-var result [][] int
 func combinationSum(candidates []int, target int) [][]int {
-	// 排序数组，才能使用剪枝功能
-	sort.Ints(candidates)
-	// clear result
-	// 如果这里不清理result, 那么每次结果就会累计起来
-	result = result[0:0]
-	dfs(target, candidates, []int(nil))
+	res := [][]int{}
+	var dfs func(start int, temp []int, sum int)
 
-	return result
-}
-
-//确定回溯函数返回值以及参数
-//确定回溯函数终止条件
-//确定回溯函数的遍历过程
-
-// 1.确定参数和返回值
-func dfs(sum int, candidates []int, path []int)  {
-	// 2.确定终止条件
-	if sum == 0 {
-		result = append(result, append([]int(nil), path...))
-	}
-
-	// 3.遍历当前层中所有的元素
-	for i, num := range candidates {
-		if sum - num  < 0{
+	dfs = func(start int, temp []int, sum int) {
+		if sum >= target {
+			if sum == target {
+				newTmp := make([]int, len(temp))
+				copy(newTmp, temp)
+				res = append(res, newTmp)
+			}
 			return
 		}
-		// append(path, num) 将会创建一个新的path切片
-		// 因此当前层的Path不会改变，所以自带回溯效果
-		dfs(sum - num, candidates[i:], append(path, num))
+		for i := start; i < len(candidates); i++ {
+			temp = append(temp, candidates[i])
+			dfs(i, temp, sum+candidates[i])
+			temp = temp[:len(temp)-1]
+		}
 	}
+	dfs(0, []int{}, 0)
+	return res
 }
 //leetcode submit region end(Prohibit modification and deletion)
 

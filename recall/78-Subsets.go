@@ -1,5 +1,7 @@
 package main
 
+import "sort"
+
 // 78-子集
 
 //给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。 
@@ -42,29 +44,22 @@ func main() {
 //leetcode submit region begin(Prohibit modification and deletion)
 func subsets(nums []int) [][]int {
 	ans := make([][]int, 0)
-	// count为每个子集的长度
 	// data为子集
-	var dfs func(count int, data []int, index int)
+	var dfs func(nums []int, data []int, index int)
+	sort.Ints(nums)
+	dfs = func(nums []int, data []int, index int) {
+		tmp := make([]int, len(data))
+		copy(tmp,data)
+		ans = append(ans, tmp)
 
-	dfs = func(count int, data []int, index int) {
-		if count == len(data){
-			tmp := make([]int, len(data))
-			copy(tmp,data)
-			ans = append(ans, tmp)
-			return
-		}
 		for i:=index; i<len(nums); i++ {
 			data = append(data, nums[i])
-			dfs(count, data, i+1)
+			dfs(nums, data, i+1)
 			data = data[:len(data)-1]  // 回溯
 		}
 	}
 
-	for count:=0; count<=len(nums); count++ {
-		data := make([]int, 0, count)
-		dfs(count, data, 0)
-	}
-
+	dfs(nums, []int{}, 0)
 	return ans
 }
 //leetcode submit region end(Prohibit modification and deletion)
